@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:gravity="center_horizontal"
+	android:weightSum="4.25"
+	android:layout_height="match_parent"
+	android:background="@drawable/gradient"
+	>
+
+	<TextView
+		android:id="@+id/date"
+		android:layout_weight="1"
+		android:hint="mm/dd/yy"
+		android:layout_width="0dp"
+		android:layout_marginTop="6dp"
+		android:layout_height="wrap_content" />
+
+	<TextView
+		android:id="@+id/name"
+		android:layout_weight="3"
+		android:hint="note title goes here..."
+		android:layout_width="0dp"
+		android:layout_marginTop="6dp"
+		android:layout_height="wrap_content" />
+
+</LinearLayout>
