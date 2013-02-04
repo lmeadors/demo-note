@@ -1,16 +1,16 @@
 package com.elm.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import com.elm.*;
+import com.elm.view.NoteListActivity;
 
-public class HelloAndroidActivityTest extends ActivityInstrumentationTestCase2<HelloAndroidActivity> {
+public class HelloAndroidActivityTest extends ActivityInstrumentationTestCase2<NoteListActivity> {
 
     public HelloAndroidActivityTest() {
-        super(HelloAndroidActivity.class); 
+        super(NoteListActivity.class);
     }
 
     public void testActivity() {
-        HelloAndroidActivity activity = getActivity();
+        NoteListActivity activity = getActivity();
         assertNotNull(activity);
     }
 }
