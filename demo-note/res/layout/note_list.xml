@@ -10,7 +10,7 @@
 		style="@style/title"
 		android:text="@string/hello" />
 
-	<LinearLayout
+	<ListView
 		android:id="@+id/note_list"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"

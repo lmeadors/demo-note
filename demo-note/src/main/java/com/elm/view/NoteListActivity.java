@@ -1,28 +1,29 @@
 package com.elm.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import com.elm.presenter.NoteListPresenter;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import com.elm.NoteListView;
 import com.elm.R;
 import com.elm.bean.Note;
 import com.elm.model.NoteDataSourceImpl;
-import com.elm.utility.DateUtility;
+import com.elm.presenter.NoteListPresenter;
 
+import java.util.Date;
 import java.util.List;
 
 public class NoteListActivity extends Activity implements NoteListView {
 
 	private static final String TAG = NoteListActivity.class.getName();
-	private final DateUtility dateUtility = new DateUtility();
 	private NoteListPresenter presenter;
 
-	private LinearLayout noteListing;
+	private ListView noteListing;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,10 +35,10 @@ public class NoteListActivity extends Activity implements NoteListView {
 		presenter = new NoteListPresenter(this, new NoteDataSourceImpl(this), this);
 
 		Log.d(TAG, "setting view");
-		setContentView(R.layout.main);
+		setContentView(R.layout.note_list);
 
 		Log.d(TAG, "getting ui components");
-		noteListing = (LinearLayout) findViewById(R.id.note_list);
+		noteListing = (ListView) findViewById(R.id.note_list);
 
 		Log.d(TAG, "view is ready for data");
 		presenter.viewReady();
@@ -50,28 +51,34 @@ public class NoteListActivity extends Activity implements NoteListView {
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// only one menu option here...
+		editNote(new Note());
+		return true;
+	}
+
 	public void setNoteList(List<Note> noteList) {
 
-		// todo: change to use adapter
-		Log.d(TAG, "adding " + noteList.size() + " notes");
-
-		final LayoutInflater inflater = getLayoutInflater();
-
-		for (Note note : noteList) {
-
-			final LinearLayout noteView = (LinearLayout) inflater.inflate(R.layout.note_list_item, null, false);
-
-			final TextView dateView = (TextView) noteView.findViewById(R.id.date);
-			final TextView titleView = (TextView) noteView.findViewById(R.id.title);
-
-			dateView.setText(dateUtility.dateString(note.getDate()));
-			titleView.setText(note.getTitle());
-
-			Log.d(TAG, "adding note "+note);
-			noteListing.addView(noteView);
-
+		// todo: remove these 50 dummy notes
+		for (long i = 1; i <= 50; i++) {
+			noteList.add(new Note(i * 10, new Date(), "test note " + i, "whatever"));
 		}
 
+		Log.d(TAG, "adding " + noteList.size() + " notes");
+
+		noteListing.setAdapter(new NoteListAdapter(this, R.layout.note_list_item, noteList));
+		noteListing.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> list, View view, int index, long noteId) {
+				Log.d(TAG, "you touched item " + index + " / " + noteId);
+				editNote((Note) list.getAdapter().getItem(index));
+			}
+		});
+
+	}
+
+	private void editNote(final Note note) {
+		startActivity(new Intent(this, NoteEditActivity.class).putExtra(Note.class.getName(), note));
 	}
 
 }

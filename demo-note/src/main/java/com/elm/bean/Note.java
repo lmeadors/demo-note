@@ -21,6 +21,13 @@ public class Note implements Serializable {
 		this(newId, note.getDate(), note.getTitle(), note.getNote());
 	}
 
+	public Note() {
+		id = null;
+		date = new Date();
+		title = null;
+		note = null;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -2,4 +2,7 @@
 <resources>
     <string name="hello">Welcome to demo note!</string>
     <string name="app_name">Demo note application</string>
+	<string name="note_id_hint">(new note)</string>
+	<string name="note_title_hint">Note Title</string>
+	<string name="note_text_hint">your note here...</string>
 </resources>
