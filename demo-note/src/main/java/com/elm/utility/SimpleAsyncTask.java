@@ -4,7 +4,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.elm.bean.Message;
 
-public abstract class SimpleAsyncTask<T, U, V extends Message> extends AsyncTask<T, U, V> {
+public abstract class SimpleAsyncTask<ParameterType, ProgressType, ReturnType extends Message>
+		extends AsyncTask<ParameterType, ProgressType, ReturnType>
+{
 
 	private static final String TAG = SimpleAsyncTask.class.getName();
 	private final LocalBroadcastUtility localBroadcastUtility;
@@ -18,9 +20,9 @@ public abstract class SimpleAsyncTask<T, U, V extends Message> extends AsyncTask
 	}
 
 	@Override
-	protected void onPostExecute(V v) {
-		Log.d(TAG, "sending " + v + " as action " + sendingAction);
-		localBroadcastUtility.sendBroadcast(sendingAction, v);
+	protected void onPostExecute(ReturnType returnValue) {
+		Log.d(TAG, "sending " + returnValue + " as action " + sendingAction);
+		localBroadcastUtility.sendBroadcast(sendingAction, returnValue);
 	}
 
 }

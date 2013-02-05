@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.elm.NoteListPresenter;
+import com.elm.presenter.NoteListPresenter;
 import com.elm.NoteListView;
 import com.elm.R;
 import com.elm.bean.Note;
@@ -43,8 +44,15 @@ public class NoteListActivity extends Activity implements NoteListView {
 
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.list, menu);
+		return true;
+	}
+
 	public void setNoteList(List<Note> noteList) {
 
+		// todo: change to use adapter
 		Log.d(TAG, "adding " + noteList.size() + " notes");
 
 		final LayoutInflater inflater = getLayoutInflater();

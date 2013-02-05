@@ -48,6 +48,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 					cursor.getString(3)
 			);
 		}
+		// todo: close cursor
 		Log.d(TAG, "note " + id + " not found");
 		return null;
 	}
@@ -90,13 +91,14 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 			} while (cursor.moveToNext());
 		}
 
+		// todo: close cursor
+
 		return noteList;
 
 	}
 
 
 	public void listAsync() {
-
 
 		final AsyncTask<Void, Void, Message<List<Note>>> task;
 

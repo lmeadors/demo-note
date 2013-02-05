@@ -2,15 +2,15 @@ package com.elm.bean;
 
 import java.io.Serializable;
 
-public class Message<T> implements Serializable {
+public class Message<PayloadType> implements Serializable {
 
-	private final T payload;
+	private final PayloadType payload;
 
-	public Message(T payload) {
+	public Message(PayloadType payload) {
 		this.payload = payload;
 	}
 
-	public T getPayload() {
+	public PayloadType getPayload() {
 		return payload;
 	}
 

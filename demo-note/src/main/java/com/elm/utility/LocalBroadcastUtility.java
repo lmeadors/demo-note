@@ -66,8 +66,8 @@ public class LocalBroadcastUtility {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getPayload(Intent intent, Class<T> type) {
-		return (T) intent.getExtras().get(type.getName());
+	public <PayloadType> PayloadType getPayload(Intent intent, Class<PayloadType> type) {
+		return (PayloadType) intent.getExtras().get(type.getName());
 	}
 
 	public void registerReceiver(BroadcastReceiver receiver, String action) {

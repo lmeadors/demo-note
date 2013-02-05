@@ -13,6 +13,7 @@ public interface NoteDataSource {
 	public static final String UPDATE_ACTION = NoteDataSource.class.getName() + ".update";
 	public static final String DELETE_ACTION = NoteDataSource.class.getName() + ".delete";
 
+	// synchronous operations
 	List<Note> list();
 
 	Note fetch(Integer id);
@@ -23,6 +24,7 @@ public interface NoteDataSource {
 
 	Integer delete(Integer id);
 
+	// asynchronous operations
 	void listAsync();
 
 	void fetchAsync(Integer id);

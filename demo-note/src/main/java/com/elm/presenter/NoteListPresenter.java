@@ -1,9 +1,11 @@
-package com.elm;
+package com.elm.presenter;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import com.elm.NoteDataSource;
+import com.elm.NoteListView;
 import com.elm.bean.Message;
 import com.elm.bean.Note;
 import com.elm.utility.LocalBroadcastUtility;
@@ -35,7 +37,8 @@ public class NoteListPresenter {
 			public void onReceive(Context context, Intent intent) {
 				Log.d(TAG, "message received");
 				localBroadcastUtility.unregisterReceiver(this);
-				onNoteListLoaded(localBroadcastUtility.getPayload(intent, Message.class));
+				final Message message = localBroadcastUtility.getPayload(intent, Message.class);
+				onNoteListLoaded(message);
 			}
 		};
 
