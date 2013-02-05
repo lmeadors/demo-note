@@ -16,23 +16,23 @@ public interface NoteDataSource {
 	// synchronous operations
 	List<Note> list();
 
-	Note fetch(Integer id);
+	Note fetch(Long id);
 
 	Note insert(Note note);
 
 	Note update(Note note);
 
-	Integer delete(Integer id);
+	Long delete(Long id);
 
 	// asynchronous operations
 	void listAsync();
 
-	void fetchAsync(Integer id);
+	void fetchAsync(Long id);
 
 	void insertAsync(Note note);
 
 	void updateAsync(Note note);
 
-	void deleteAsync(Integer id);
+	void deleteAsync(Long id);
 
 }

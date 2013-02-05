@@ -8,24 +8,24 @@ public class Note implements Serializable {
 	private final Long id;
 	private final Date date;
 	private final String title;
-	private final String note;
+	private final String text;
 
-	public Note(Long id, Date date, String title, String note) {
+	public Note(Long id, Date date, String title, String text) {
 		this.title = title;
-		this.note = note;
+		this.text = text;
 		this.date = date;
 		this.id = id;
 	}
 
 	public Note(Long newId, Note note) {
-		this(newId, note.getDate(), note.getTitle(), note.getNote());
+		this(newId, note.getDate(), note.getTitle(), note.getText());
 	}
 
 	public Note() {
 		id = null;
 		date = new Date();
 		title = null;
-		note = null;
+		text = null;
 	}
 
 	public Long getId() {
@@ -40,8 +40,8 @@ public class Note implements Serializable {
 		return title;
 	}
 
-	public String getNote() {
-		return note;
+	public String getText() {
+		return text;
 	}
 
 	@Override

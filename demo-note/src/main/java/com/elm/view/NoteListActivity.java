@@ -15,7 +15,6 @@ import com.elm.bean.Note;
 import com.elm.model.NoteDataSourceImpl;
 import com.elm.presenter.NoteListPresenter;
 
-import java.util.Date;
 import java.util.List;
 
 public class NoteListActivity extends Activity implements NoteListView {
@@ -47,7 +46,7 @@ public class NoteListActivity extends Activity implements NoteListView {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.list, menu);
+		getMenuInflater().inflate(R.menu.note_list, menu);
 		return true;
 	}
 
@@ -58,12 +57,19 @@ public class NoteListActivity extends Activity implements NoteListView {
 		return true;
 	}
 
+	@Override
+	protected void onResume() {
+		Log.d(TAG, "resuming list activity");
+		super.onResume();
+		presenter.viewReady();
+	}
+
 	public void setNoteList(List<Note> noteList) {
 
 		// todo: remove these 50 dummy notes
-		for (long i = 1; i <= 50; i++) {
-			noteList.add(new Note(i * 10, new Date(), "test note " + i, "whatever"));
-		}
+//		for (long i = 1; i <= 50; i++) {
+//			noteList.add(new Note(i * 10, new Date(), "test note " + i, "whatever"));
+//		}
 
 		Log.d(TAG, "adding " + noteList.size() + " notes");
 

@@ -41,7 +41,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		database = getWritableDatabase();
 	}
 
-	public Note fetch(Integer id) {
+	public Note fetch(Long id) {
 		Log.d(TAG, "fetching note " + id);
 
 		final Cursor cursor = database.query(TABLE_NAME, ALL_COLS, NOTE_ID + " = ?", new String[]{id.toString()}, null, null, null);
@@ -52,9 +52,9 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 					Log.d(TAG, "note " + id + " found");
 					return new Note(
 							cursor.getLong(0),
-							Timestamp.valueOf(cursor.getString(1)),
-							cursor.getString(2),
-							cursor.getString(3)
+							Timestamp.valueOf(cursor.getString(3)),
+							cursor.getString(1),
+							cursor.getString(2)
 					);
 				}
 			} finally {
@@ -75,7 +75,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		values.put(NOTE_ID, (Long) null);
 		values.put(NOTE_TITLE, note.getTitle());
 		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
-		values.put(NOTE_TEXT, note.getNote());
+		values.put(NOTE_TEXT, note.getText());
 
 		final Long newId = database.insert(TABLE_NAME, null, values);
 
@@ -91,18 +91,18 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		values.put(NOTE_ID, note.getId());
 		values.put(NOTE_TITLE, note.getTitle());
 		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
-		values.put(NOTE_TEXT, note.getNote());
+		values.put(NOTE_TEXT, note.getText());
 
-		database.update(TABLE_NAME, values, "id = ?", new String[]{note.getId().toString()});
+		database.update(TABLE_NAME, values, NOTE_ID + " = ?", new String[]{note.getId().toString()});
 
-		return null;
+		return note;
 	}
 
-	public Integer delete(Integer id) {
+	public Long delete(Long id) {
 
 		Log.d(TAG, "delete note " + id);
 
-		database.delete(TABLE_NAME, "id = ?", new String[]{id.toString()});
+		database.delete(TABLE_NAME, NOTE_ID + " = ?", new String[]{id.toString()});
 
 		return id;
 
@@ -118,11 +118,12 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 			try {
 				if (cursor.moveToFirst()) {
 					do {
+						final String dateString = cursor.getString(3);
 						noteList.add(new Note(
 								cursor.getLong(0),
-								Timestamp.valueOf(cursor.getString(1)),
-								cursor.getString(2),
-								cursor.getString(3)));
+								Timestamp.valueOf(dateString == null ? "1999-12-31 00:00:00" : dateString),
+								cursor.getString(1),
+								cursor.getString(2)));
 					} while (cursor.moveToNext());
 				}
 			} finally {
@@ -152,13 +153,13 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 	}
 
-	public void fetchAsync(Integer id) {
+	public void fetchAsync(Long id) {
 
-		final AsyncTask<Integer, Void, Message<Note>> task;
+		final AsyncTask<Long, Void, Message<Note>> task;
 
-		task = new SimpleAsyncTask<Integer, Void, Message<Note>>(localBroadcastUtility, FETCH_ACTION) {
+		task = new SimpleAsyncTask<Long, Void, Message<Note>>(localBroadcastUtility, FETCH_ACTION) {
 			@Override
-			protected Message<Note> doInBackground(Integer... ids) {
+			protected Message<Note> doInBackground(Long... ids) {
 				return new Message<Note>(fetch(ids[0]));
 			}
 		};
@@ -197,14 +198,14 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 	}
 
-	public void deleteAsync(Integer id) {
+	public void deleteAsync(Long id) {
 
-		final SimpleAsyncTask<Integer, Void, Message<Integer>> task;
+		final SimpleAsyncTask<Long, Void, Message<Long>> task;
 
-		task = new SimpleAsyncTask<Integer, Void, Message<Integer>>(localBroadcastUtility, DELETE_ACTION) {
+		task = new SimpleAsyncTask<Long, Void, Message<Long>>(localBroadcastUtility, DELETE_ACTION) {
 			@Override
-			protected Message<Integer> doInBackground(Integer... ids) {
-				return new Message<Integer>(delete(ids[0]));
+			protected Message<Long> doInBackground(Long... ids) {
+				return new Message<Long>(delete(ids[0]));
 			}
 		};
 
