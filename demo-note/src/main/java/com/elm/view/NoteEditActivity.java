@@ -1,11 +1,13 @@
 package com.elm.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import com.elm.NoteEditView;
 import com.elm.R;
@@ -22,6 +24,8 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 
 	private NoteEditPresenter noteEditPresenter;
 	private Note note;
+
+	private ShareActionProvider shareActionProvider;
 
 	private TextView id;
 	private TextView date;
@@ -55,27 +59,55 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
 		getMenuInflater().inflate(R.menu.note_edit, menu);
 		// we need to hide the delete menu item in the case of a NEW note
 		deleteMenuItem = menu.findItem(R.id.delete_note);
+
+		// get our share provider
+		shareActionProvider = (ShareActionProvider) menu.findItem(R.id.share_note).getActionProvider();
+
 		noteEditPresenter.viewReady();
+
 		return true;
+
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()){
-			case R.id.save_note:{
+
+		switch (item.getItemId()) {
+
+			case R.id.save_note: {
 				saveNote();
 				break;
 			}
-			case R.id.delete_note:{
+
+			case R.id.delete_note: {
 				deleteNote();
 				break;
 			}
 		}
 
 		return true;
+
+	}
+
+	private void prepareShareIntent() {
+
+		if (shareActionProvider != null) {
+
+			final Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("text/plain");
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+			// Add data to the intent, the receiving app will decide what to do with it.
+			intent.putExtra(Intent.EXTRA_SUBJECT, note.getTitle());
+			intent.putExtra(Intent.EXTRA_TEXT, note.getText());
+
+			shareActionProvider.setShareIntent(intent);
+
+		}
 	}
 
 	private void deleteNote() {
@@ -97,6 +129,9 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		date.setText(dateUtility.dateString(note.getDate()));
 		title.setText(note.getTitle());
 		text.setText(note.getText());
+
+		// todo: add call to this to change listeners?
+		prepareShareIntent();
 
 	}
 

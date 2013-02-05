@@ -10,5 +10,9 @@
 		android:id="@+id/delete_note"
 		android:title="Delete note"
 		android:titleCondensed="Delete" />
+	<item
+		android:id="@+id/share_note"
+		android:title="Share"
+		android:actionProviderClass="android.widget.ShareActionProvider" />
 
 </menu>
