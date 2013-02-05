@@ -1,5 +1,6 @@
 package com.elm.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +10,7 @@ import android.util.Log;
 import com.elm.NoteDataSource;
 import com.elm.bean.Message;
 import com.elm.bean.Note;
+import com.elm.utility.DateUtility;
 import com.elm.utility.LocalBroadcastUtility;
 import com.elm.utility.SimpleAsyncTask;
 
@@ -20,6 +22,8 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 	private static final String TAG = NoteDataSourceImpl.class.getName();
 
+	private final DateUtility dateUtility = new DateUtility();
+
 	public static final String DB_NAME = "DEMO_NOTES";
 	private static final String TABLE_NAME = "NOTES";
 	private static final String NOTE_ID = "NOTE_ID";
@@ -29,74 +33,106 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 	private static final String[] ALL_COLS = {NOTE_ID, NOTE_TITLE, NOTE_TEXT, NOTE_DATE};
 
 	private LocalBroadcastUtility localBroadcastUtility;
+	private final SQLiteDatabase database;
 
 	public NoteDataSourceImpl(Context context) {
 		super(context, DB_NAME, null, 1);
 		localBroadcastUtility = new LocalBroadcastUtility(context);
+		database = getWritableDatabase();
 	}
 
 	public Note fetch(Integer id) {
 		Log.d(TAG, "fetching note " + id);
-		final SQLiteDatabase database = this.getReadableDatabase();
+
 		final Cursor cursor = database.query(TABLE_NAME, ALL_COLS, NOTE_ID + " = ?", new String[]{id.toString()}, null, null, null);
-		if (cursor.moveToFirst()) {
-			Log.d(TAG, "note " + id + " found");
-			return new Note(
-					cursor.getInt(0),
-					Timestamp.valueOf(cursor.getString(1)),
-					cursor.getString(2),
-					cursor.getString(3)
-			);
+
+		if (null != cursor) {
+			try {
+				if (cursor.moveToFirst()) {
+					Log.d(TAG, "note " + id + " found");
+					return new Note(
+							cursor.getLong(0),
+							Timestamp.valueOf(cursor.getString(1)),
+							cursor.getString(2),
+							cursor.getString(3)
+					);
+				}
+			} finally {
+				cursor.close();
+			}
 		}
-		// todo: close cursor
+
 		Log.d(TAG, "note " + id + " not found");
 		return null;
+
 	}
 
 	public Note insert(Note note) {
+
 		Log.d(TAG, "insert note " + note.getId());
-		// todo
-		return null;
+
+		ContentValues values = new ContentValues();
+		values.put(NOTE_ID, (Long) null);
+		values.put(NOTE_TITLE, note.getTitle());
+		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
+		values.put(NOTE_TEXT, note.getNote());
+
+		final Long newId = database.insert(TABLE_NAME, null, values);
+
+		return new Note(newId, note);
+
 	}
 
 	public Note update(Note note) {
 		Log.d(TAG, "update note " + note.getId());
-		// todo
+
+		final ContentValues values = new ContentValues();
+
+		values.put(NOTE_ID, note.getId());
+		values.put(NOTE_TITLE, note.getTitle());
+		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
+		values.put(NOTE_TEXT, note.getNote());
+
+		database.update(TABLE_NAME, values, "id = ?", new String[]{note.getId().toString()});
+
 		return null;
 	}
 
 	public Integer delete(Integer id) {
+
 		Log.d(TAG, "delete note " + id);
-		// todo: delete
+
+		database.delete(TABLE_NAME, "id = ?", new String[]{id.toString()});
+
 		return id;
+
 	}
 
 	public List<Note> list() {
 
 		Log.d(TAG, "getting list");
 		final List<Note> noteList = new LinkedList<Note>();
-
-		final SQLiteDatabase database = getReadableDatabase();
-
 		final Cursor cursor = database.query(TABLE_NAME, ALL_COLS, null, null, null, null, null);
 
-		// looping through all rows and adding to list
-		if (cursor.moveToFirst()) {
-			do {
-				noteList.add(new Note(
-						cursor.getInt(0),
-						Timestamp.valueOf(cursor.getString(1)),
-						cursor.getString(2),
-						cursor.getString(3)));
-			} while (cursor.moveToNext());
+		if (null != cursor) {
+			try {
+				if (cursor.moveToFirst()) {
+					do {
+						noteList.add(new Note(
+								cursor.getLong(0),
+								Timestamp.valueOf(cursor.getString(1)),
+								cursor.getString(2),
+								cursor.getString(3)));
+					} while (cursor.moveToNext());
+				}
+			} finally {
+				cursor.close();
+			}
 		}
-
-		// todo: close cursor
 
 		return noteList;
 
 	}
-
 
 	public void listAsync() {
 

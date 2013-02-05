@@ -5,23 +5,23 @@ import java.util.Date;
 
 public class Note implements Serializable {
 
-	private final Integer id;
+	private final Long id;
 	private final Date date;
 	private final String title;
 	private final String note;
 
-	public Note(Integer id, Date date, String title, String note) {
+	public Note(Long id, Date date, String title, String note) {
 		this.title = title;
 		this.note = note;
 		this.date = date;
 		this.id = id;
 	}
 
-	public Note(int newId, Note note) {
+	public Note(Long newId, Note note) {
 		this(newId, note.getDate(), note.getTitle(), note.getNote());
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
