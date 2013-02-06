@@ -4,15 +4,21 @@
 
 	<item
 		android:id="@+id/save_note"
+		android:icon="@drawable/ic_menu_save"
+		android:showAsAction="withText|ifRoom"
 		android:title="Save note"
 		android:titleCondensed="Save" />
 	<item
 		android:id="@+id/delete_note"
+		android:icon="@drawable/ic_menu_delete"
+		android:showAsAction="withText|ifRoom"
 		android:title="Delete note"
 		android:titleCondensed="Delete" />
 	<item
 		android:id="@+id/share_note"
 		android:title="Share"
+		android:titleCondensed="Share"
+		android:showAsAction="withText|ifRoom"
 		android:actionProviderClass="android.widget.ShareActionProvider" />
 
 </menu>
