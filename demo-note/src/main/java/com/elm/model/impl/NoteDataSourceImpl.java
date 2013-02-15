@@ -1,4 +1,4 @@
-package com.elm.model;
+package com.elm.model.impl;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,18 +7,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.elm.NoteDataSource;
 import com.elm.bean.Message;
 import com.elm.bean.Note;
+import com.elm.model.NoteDataSource;
 import com.elm.utility.DateUtility;
 import com.elm.utility.LocalBroadcastUtility;
 import com.elm.utility.SimpleAsyncTask;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
-public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSource {
+public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSource, Serializable {
 
 	private static final String TAG = NoteDataSourceImpl.class.getName();
 
@@ -32,18 +33,18 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 	private static final String NOTE_DATE = "NOTE_DATE";
 	private static final String[] ALL_COLS = {NOTE_ID, NOTE_TITLE, NOTE_TEXT, NOTE_DATE};
 
-	private LocalBroadcastUtility localBroadcastUtility;
-	private final SQLiteDatabase database;
+	private final LocalBroadcastUtility localBroadcastUtility;
+//	private final SQLiteDatabase database;
 
 	public NoteDataSourceImpl(Context context) {
 		super(context, DB_NAME, null, 1);
 		localBroadcastUtility = new LocalBroadcastUtility(context);
-		database = getWritableDatabase();
+//		database = getWritableDatabase();
 	}
-
+/*
 	public Note fetch(Long id) {
 		Log.d(TAG, "fetching note " + id);
-
+		SQLiteDatabase database = getReadableDatabase();
 		final Cursor cursor = database.query(TABLE_NAME, ALL_COLS, NOTE_ID + " = ?", new String[]{id.toString()}, null, null, null);
 
 		if (null != cursor) {
@@ -66,7 +67,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		return null;
 
 	}
-
+*/
 	public Note insert(Note note) {
 
 		Log.d(TAG, "insert note " + note.getId());
@@ -77,6 +78,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
 		values.put(NOTE_TEXT, note.getText());
 
+		SQLiteDatabase database = getWritableDatabase();
 		final Long newId = database.insert(TABLE_NAME, null, values);
 
 		return new Note(newId, note);
@@ -93,6 +95,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
 		values.put(NOTE_TEXT, note.getText());
 
+		SQLiteDatabase database = getWritableDatabase();
 		database.update(TABLE_NAME, values, NOTE_ID + " = ?", new String[]{note.getId().toString()});
 
 		return note;
@@ -102,6 +105,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 		Log.d(TAG, "delete note " + id);
 
+		SQLiteDatabase database = getWritableDatabase();
 		database.delete(TABLE_NAME, NOTE_ID + " = ?", new String[]{id.toString()});
 
 		return id;
@@ -112,6 +116,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 		Log.d(TAG, "getting list");
 		final List<Note> noteList = new LinkedList<Note>();
+		SQLiteDatabase database = getReadableDatabase();
 		final Cursor cursor = database.query(TABLE_NAME, ALL_COLS, null, null, null, null, null);
 
 		if (null != cursor) {
@@ -153,20 +158,16 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 	}
 
-	public void fetchAsync(Long id) {
-
-		final AsyncTask<Long, Void, Message<Note>> task;
-
-		task = new SimpleAsyncTask<Long, Void, Message<Note>>(localBroadcastUtility, FETCH_ACTION) {
-			@Override
-			protected Message<Note> doInBackground(Long... ids) {
-				return new Message<Note>(fetch(ids[0]));
-			}
-		};
-
-		task.execute(id);
-
-	}
+//	public void fetchAsync(Long id) {
+//		final AsyncTask<Long, Void, Message<Note>> task;
+//		task = new SimpleAsyncTask<Long, Void, Message<Note>>(localBroadcastUtility, FETCH_ACTION) {
+//			@Override
+//			protected Message<Note> doInBackground(Long... ids) {
+//				return new Message<Note>(fetch(ids[0]));
+//			}
+//		};
+//		task.execute(id);
+//	}
 
 	public void insertAsync(Note note) {
 

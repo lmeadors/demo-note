@@ -1,9 +1,10 @@
 package com.elm.utility;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateUtility {
+public class DateUtility implements Serializable {
 
 	public static final String DISPLAY_DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
 	public static final String SQL_LITE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";

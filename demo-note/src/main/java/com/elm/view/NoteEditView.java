@@ -1,4 +1,4 @@
-package com.elm;
+package com.elm.view;
 
 import com.elm.bean.Note;
 

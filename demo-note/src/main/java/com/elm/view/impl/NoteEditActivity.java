@@ -1,4 +1,4 @@
-package com.elm.view;
+package com.elm.view.impl;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,10 +9,10 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
-import com.elm.NoteEditView;
+import com.elm.view.NoteEditView;
 import com.elm.R;
+import com.elm.controller.AppController;
 import com.elm.bean.Note;
-import com.elm.model.NoteDataSourceImpl;
 import com.elm.presenter.NoteEditPresenter;
 import com.elm.utility.DateUtility;
 
@@ -41,26 +41,27 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		Log.d(TAG, "get note from calling intent");
 		note = (Note) getIntent().getSerializableExtra(Note.class.getName());
 
-		noteEditPresenter = new NoteEditPresenter(this, new NoteDataSourceImpl(this), this);
-		noteEditPresenter.setNote(note);
+		Log.d(TAG, "get app controller from intent");
+		final AppController appController = (AppController) getIntent().getSerializableExtra(AppController.class.getName());
 
-		Log.d(TAG, "get view components");
+		Log.d(TAG, "get presenter from controller");
+		noteEditPresenter = appController.getNoteEditPresenter(this, this, note);
+
+		Log.d(TAG, "prepare view components");
 		setContentView(R.layout.note_edit);
 		id = (TextView) findViewById(R.id.note_id);
 		date = (TextView) findViewById(R.id.note_date);
 		title = (EditText) findViewById(R.id.note_title);
 		text = (EditText) findViewById(R.id.note_text);
 
-		noteEditPresenter.setNote(note);
-
-		Log.d(TAG, "let's edit " + note);
-
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
+		Log.d(TAG, "create menu");
 		getMenuInflater().inflate(R.menu.note_edit, menu);
+
 		// we need to hide the delete menu item in the case of a NEW note
 		deleteMenuItem = menu.findItem(R.id.delete_note);
 
@@ -74,17 +75,25 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 	}
 
 	@Override
+	protected void onPause() {
+		Log.d(TAG, "releasing presenter");
+		noteEditPresenter.release();
+		super.onPause();
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
 
 			case R.id.save_note: {
-				saveNote();
+				Note noteToSave = new Note(note.getId(), note.getDate(), title.getText().toString(), text.getText().toString());
+				noteEditPresenter.save(noteToSave);
 				break;
 			}
 
 			case R.id.delete_note: {
-				deleteNote();
+				noteEditPresenter.delete(note);
 				break;
 			}
 		}
@@ -110,22 +119,14 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		}
 	}
 
-	private void deleteNote() {
-		noteEditPresenter.delete(note);
-	}
-
-	private void saveNote() {
-		Note noteToSave = new Note(note.getId(), note.getDate(), title.getText().toString(), text.getText().toString());
-		noteEditPresenter.save(noteToSave);
-	}
-
 	public void setNote(Note note) {
 
 		this.note = note;
 
 		Log.d(TAG, "setting values on view components");
-		if (null != note.getId())
+		if (null != note.getId()) {
 			id.setText(note.getId().toString());
+		}
 		date.setText(dateUtility.dateString(note.getDate()));
 		title.setText(note.getTitle());
 		text.setText(note.getText());
