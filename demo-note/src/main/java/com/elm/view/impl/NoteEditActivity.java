@@ -1,7 +1,6 @@
 package com.elm.view.impl;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -85,8 +84,6 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		prepareShareIntent();
-
 		switch (item.getItemId()) {
 
 			case R.id.save_note: {
@@ -99,29 +96,18 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 				noteEditPresenter.delete(note);
 				break;
 			}
+
+			default: {
+				noteEditPresenter.prepareShareIntent(shareActionProvider, title.getText().toString(), text.getText().toString());
+			}
+
 		}
 
 		return true;
 
 	}
 
-	private void prepareShareIntent() {
-
-		if (shareActionProvider != null) {
-
-			final Intent intent = new Intent(Intent.ACTION_SEND);
-			intent.setType("text/plain");
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-
-			// Add data to the intent, the receiving app will decide what to do with it.
-			intent.putExtra(Intent.EXTRA_SUBJECT, title.getText().toString());
-			intent.putExtra(Intent.EXTRA_TEXT, text.getText().toString());
-
-			shareActionProvider.setShareIntent(intent);
-
-		}
-	}
-
+	@Override
 	public void setNote(Note note) {
 
 		this.note = note;
@@ -136,15 +122,18 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 
 	}
 
+	@Override
 	public void noteDeleted(Long noteId) {
 		// go back to previous activity
 		finish();
 	}
 
+	@Override
 	public void hideDelete() {
 		deleteMenuItem.setEnabled(false);
 	}
 
+	@Override
 	public void showDelete() {
 		deleteMenuItem.setEnabled(true);
 	}

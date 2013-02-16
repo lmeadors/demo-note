@@ -3,6 +3,7 @@ package com.elm.presenter.impl;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.ShareActionProvider;
 import com.elm.bean.Message;
 import com.elm.bean.Note;
 import com.elm.controller.AppController;
@@ -95,4 +96,22 @@ public class NoteEditPresenterImpl implements NoteEditPresenter {
 
 	}
 
+	@Override
+	public void prepareShareIntent(ShareActionProvider provider, String subject, String text) {
+
+		if (provider != null) {
+
+			final Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("text/plain");
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+			// Add data to the intent, the receiving app will decide what to do with it.
+			intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+			intent.putExtra(Intent.EXTRA_TEXT, text);
+
+			provider.setShareIntent(intent);
+
+		}
+
+	}
 }

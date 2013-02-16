@@ -43,7 +43,7 @@ public class NoteListActivityTest extends ActivityInstrumentationTestCase2<NoteL
 		final Instrumentation instrumentation = getInstrumentation();
 		final Context context = instrumentation.getTargetContext();
 
-		AppController mockController = prepareController();
+		AppController mockController = new TestAppController();
 
 		final Intent intent = new Intent().putExtra(AppController.class.getName(), mockController);
 
@@ -76,7 +76,7 @@ public class NoteListActivityTest extends ActivityInstrumentationTestCase2<NoteL
 		final Instrumentation instrumentation = getInstrumentation();
 		final Context context = instrumentation.getTargetContext();
 
-		AppController mockController = prepareController();
+		AppController mockController = new TestAppController();
 
 		final Intent intent = new Intent().putExtra(AppController.class.getName(), mockController);
 
@@ -102,7 +102,7 @@ public class NoteListActivityTest extends ActivityInstrumentationTestCase2<NoteL
 
 	public void test_should_bootstrap_controller() {
 
-		AppController mockController = prepareController();
+		AppController mockController = new TestAppController();
 		AppControllerImpl.setInstance(mockController);
 
 		NoteListActivity activity = getActivity();
@@ -123,7 +123,7 @@ public class NoteListActivityTest extends ActivityInstrumentationTestCase2<NoteL
 		final Instrumentation instrumentation = getInstrumentation();
 		final Context context = instrumentation.getTargetContext();
 
-		AppController mockController = prepareController();
+		AppController mockController = new TestAppController();
 
 		final Intent intent = new Intent().putExtra(AppController.class.getName(), mockController);
 
@@ -172,10 +172,6 @@ public class NoteListActivityTest extends ActivityInstrumentationTestCase2<NoteL
 		// whew. Done.
 		activity.finish();
 
-	}
-
-	private AppController prepareController() {
-		return new TestAppController();
 	}
 
 	static class TestAppController extends MockAppController {
