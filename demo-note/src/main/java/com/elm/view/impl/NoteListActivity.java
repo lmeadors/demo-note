@@ -28,10 +28,6 @@ public class NoteListActivity extends Activity implements NoteListView {
 
 	private ListView noteListing;
 
-	public NoteListActivity() {
-		Log.d(TAG, "creating activity...");
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -40,7 +36,7 @@ public class NoteListActivity extends Activity implements NoteListView {
 
 		controller = findAppController();
 
-		presenter = findPresenter();
+		presenter = controller.getNoteListPresenter(this);
 
 		Log.d(TAG, "setting view");
 		setContentView(R.layout.note_list);
@@ -77,6 +73,7 @@ public class NoteListActivity extends Activity implements NoteListView {
 		super.onResume();
 	}
 
+	@Override
 	public void setNoteList(List<Note> noteList) {
 
 		Log.d(TAG, "adding " + noteList.size() + " notes");
@@ -88,23 +85,6 @@ public class NoteListActivity extends Activity implements NoteListView {
 				controller.editNote((Note) list.getAdapter().getItem(index), NoteListActivity.this);
 			}
 		});
-
-	}
-
-	private NoteListPresenter findPresenter() {
-
-		Log.d(TAG, "getting presenter from intent");
-		final NoteListPresenter noteListPresenter;
-
-		if (getIntent().hasExtra(NoteListPresenter.class.getName())) {
-			Log.d(TAG, "presenter was injected, use it");
-			noteListPresenter = (NoteListPresenter) getIntent().getSerializableExtra(NoteListPresenter.class.getName());
-		} else {
-			Log.d(TAG, "no presenter provided, get one from the controller");
-			noteListPresenter = controller.getNoteListPresenter(this);
-		}
-
-		return noteListPresenter;
 
 	}
 
@@ -120,16 +100,11 @@ public class NoteListActivity extends Activity implements NoteListView {
 			appController = (AppController) intent.getSerializableExtra(AppController.class.getName());
 		} else {
 			Log.d(TAG, "app controller not injected - bootstrap one");
-			appController = new AppControllerImpl();
+			appController = AppControllerImpl.getInstance();
 		}
 
 		return appController;
 
 	}
 
-	public NoteListPresenter getPresenter() {
-		return presenter;
-	}
-
 }
-

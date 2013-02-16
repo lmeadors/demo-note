@@ -16,6 +16,8 @@ import com.elm.view.impl.NoteListActivity;
 
 public class AppControllerImpl implements AppController {
 
+	private static AppController instance;
+
 	@Override
 	public void editNote(Note note, Context context) {
 
@@ -44,6 +46,17 @@ public class AppControllerImpl implements AppController {
 	@Override
 	public LocalBroadcastUtility getLocalBroadcastUtility(Context context) {
 		return new LocalBroadcastUtility(context);
+	}
+
+	public static AppController getInstance(){
+		if(null == instance){
+			instance = new AppControllerImpl();
+		}
+		return instance;
+	}
+
+	public static void setInstance(AppController instance) {
+		AppControllerImpl.instance = instance;
 	}
 
 }
