@@ -36,7 +36,7 @@ public class NoteListActivity extends Activity implements NoteListView {
 
 		controller = findAppController();
 
-		presenter = controller.getNoteListPresenter(this);
+		presenter = controller.getNoteListPresenter(this, this);
 
 		Log.d(TAG, "setting view");
 		setContentView(R.layout.note_list);
@@ -62,7 +62,7 @@ public class NoteListActivity extends Activity implements NoteListView {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// only one menu option here...
-		controller.editNote(new Note(), this);
+		controller.editNote(this, new Note());
 		return true;
 	}
 
@@ -82,7 +82,7 @@ public class NoteListActivity extends Activity implements NoteListView {
 		noteListing.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> list, View view, int index, long noteId) {
 				Log.d(TAG, "you touched item " + index + " / " + noteId);
-				controller.editNote((Note) list.getAdapter().getItem(index), NoteListActivity.this);
+				controller.editNote(NoteListActivity.this, (Note) list.getAdapter().getItem(index));
 			}
 		});
 

@@ -9,12 +9,12 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
-import com.elm.view.NoteEditView;
 import com.elm.R;
-import com.elm.controller.AppController;
 import com.elm.bean.Note;
+import com.elm.controller.AppController;
 import com.elm.presenter.NoteEditPresenter;
 import com.elm.utility.DateUtility;
+import com.elm.view.NoteEditView;
 
 public class NoteEditActivity extends Activity implements NoteEditView {
 
@@ -54,6 +54,15 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		title = (EditText) findViewById(R.id.note_title);
 		text = (EditText) findViewById(R.id.note_text);
 
+//		final View.OnFocusChangeListener changeListener = new View.OnFocusChangeListener() {
+//			@Override
+//			public void onFocusChange(View view, boolean hasFocus) {
+//				if (!hasFocus) prepareShareIntent();
+//			}
+//		};
+//		title.setOnFocusChangeListener(changeListener);
+//		text.setOnFocusChangeListener(changeListener);
+
 	}
 
 	@Override
@@ -84,6 +93,8 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
+		prepareShareIntent();
+
 		switch (item.getItemId()) {
 
 			case R.id.save_note: {
@@ -111,8 +122,8 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
 			// Add data to the intent, the receiving app will decide what to do with it.
-			intent.putExtra(Intent.EXTRA_SUBJECT, note.getTitle());
-			intent.putExtra(Intent.EXTRA_TEXT, note.getText());
+			intent.putExtra(Intent.EXTRA_SUBJECT, title.getText().toString());
+			intent.putExtra(Intent.EXTRA_TEXT, text.getText().toString());
 
 			shareActionProvider.setShareIntent(intent);
 
@@ -130,9 +141,6 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		date.setText(dateUtility.dateString(note.getDate()));
 		title.setText(note.getTitle());
 		text.setText(note.getText());
-
-		// todo: add call to this to change listeners?
-		prepareShareIntent();
 
 	}
 

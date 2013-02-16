@@ -11,15 +11,15 @@ import com.elm.presenter.impl.NoteEditPresenterImpl;
 import com.elm.presenter.impl.NoteListPresenterImpl;
 import com.elm.utility.LocalBroadcastUtility;
 import com.elm.view.NoteEditView;
+import com.elm.view.NoteListView;
 import com.elm.view.impl.NoteEditActivity;
-import com.elm.view.impl.NoteListActivity;
 
 public class AppControllerImpl implements AppController {
 
 	private static AppController instance;
 
 	@Override
-	public void editNote(Note note, Context context) {
+	public void editNote(Context context, Note note) {
 
 		final Intent intent = new Intent(context, NoteEditActivity.class);
 
@@ -34,8 +34,8 @@ public class AppControllerImpl implements AppController {
 	}
 
 	@Override
-	public NoteListPresenter getNoteListPresenter(NoteListActivity noteListActivity) {
-		return new NoteListPresenterImpl(this, noteListActivity, new NoteDataSourceImpl(noteListActivity), noteListActivity);
+	public NoteListPresenter getNoteListPresenter(Context context, NoteListView view) {
+		return new NoteListPresenterImpl(this, view, new NoteDataSourceImpl(context), context);
 	}
 
 	@Override

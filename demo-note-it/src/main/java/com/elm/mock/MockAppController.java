@@ -1,4 +1,4 @@
-package com.elm.test.mock;
+package com.elm.mock;
 
 import android.content.Context;
 import com.elm.bean.Note;
@@ -7,17 +7,17 @@ import com.elm.presenter.NoteEditPresenter;
 import com.elm.presenter.NoteListPresenter;
 import com.elm.utility.LocalBroadcastUtility;
 import com.elm.view.NoteEditView;
-import com.elm.view.impl.NoteListActivity;
+import com.elm.view.NoteListView;
 
 public class MockAppController implements AppController{
 
 	@Override
-	public void editNote(Note note, Context context) {
+	public void editNote(Context context, Note note) {
 		throw new UnsupportedOperationException("not implemented - " + this);
 	}
 
 	@Override
-	public NoteListPresenter getNoteListPresenter(NoteListActivity noteListActivity) {
+	public NoteListPresenter getNoteListPresenter(Context context, NoteListView view) {
 		throw new UnsupportedOperationException("not implemented - " + this);
 	}
 

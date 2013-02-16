@@ -1,4 +1,4 @@
-package com.elm.test.mock;
+package com.elm.mock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
