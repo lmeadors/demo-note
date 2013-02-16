@@ -1,4 +1,4 @@
-package com.elm.test;
+package com.elm.test.view.impl;
 
 import android.app.Instrumentation;
 import android.content.Context;
