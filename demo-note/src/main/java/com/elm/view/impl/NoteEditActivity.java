@@ -113,9 +113,7 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		this.note = note;
 
 		Log.d(TAG, "setting values on view components");
-		if (null != note.getId()) {
-			id.setText(note.getId().toString());
-		}
+		id.setText("" + note.getId());
 		date.setText(dateUtility.dateString(note.getDate()));
 		title.setText(note.getTitle());
 		text.setText(note.getText());
@@ -129,13 +127,17 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 	}
 
 	@Override
-	public void hideDelete() {
+	public boolean hideDelete() {
 		deleteMenuItem.setEnabled(false);
+		deleteMenuItem.setVisible(false);
+		return deleteMenuItem.isVisible();
 	}
 
 	@Override
-	public void showDelete() {
+	public boolean showDelete() {
 		deleteMenuItem.setEnabled(true);
+		deleteMenuItem.setVisible(true);
+		return deleteMenuItem.isVisible();
 	}
 
 	@Override

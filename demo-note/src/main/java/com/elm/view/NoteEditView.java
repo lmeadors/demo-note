@@ -1,5 +1,6 @@
 package com.elm.view;
 
+import android.view.MenuItem;
 import com.elm.bean.Note;
 
 public interface NoteEditView {
@@ -8,9 +9,9 @@ public interface NoteEditView {
 
 	void noteDeleted(Long noteId);
 
-	void hideDelete();
+	boolean hideDelete();
 
-	void showDelete();
+	boolean showDelete();
 
 	void noteSaved(Note note);
 
