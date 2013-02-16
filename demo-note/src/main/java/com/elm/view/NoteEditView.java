@@ -12,4 +12,6 @@ public interface NoteEditView {
 
 	void showDelete();
 
+	void noteSaved(Note note);
+
 }

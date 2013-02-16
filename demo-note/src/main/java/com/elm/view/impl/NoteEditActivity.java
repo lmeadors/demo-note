@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.elm.R;
 import com.elm.bean.Note;
 import com.elm.controller.AppController;
@@ -53,15 +54,6 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		date = (TextView) findViewById(R.id.note_date);
 		title = (EditText) findViewById(R.id.note_title);
 		text = (EditText) findViewById(R.id.note_text);
-
-//		final View.OnFocusChangeListener changeListener = new View.OnFocusChangeListener() {
-//			@Override
-//			public void onFocusChange(View view, boolean hasFocus) {
-//				if (!hasFocus) prepareShareIntent();
-//			}
-//		};
-//		title.setOnFocusChangeListener(changeListener);
-//		text.setOnFocusChangeListener(changeListener);
 
 	}
 
@@ -155,6 +147,11 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 
 	public void showDelete() {
 		deleteMenuItem.setEnabled(true);
+	}
+
+	@Override
+	public void noteSaved(Note note) {
+		Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
 	}
 
 }

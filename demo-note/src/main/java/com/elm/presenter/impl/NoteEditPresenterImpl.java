@@ -91,6 +91,8 @@ public class NoteEditPresenterImpl implements NoteEditPresenter {
 			dataSource.updateAsync(note);
 		}
 
+		view.noteSaved(note);
+
 	}
 
 }
