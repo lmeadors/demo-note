@@ -28,7 +28,6 @@ public class NoteListPresenterImplTest extends InstrumentationTestCase {
 
 	public void test_should_send_view_note_list_when_ready() throws InterruptedException {
 
-
 		final Context context = getInstrumentation().getTargetContext();
 
 		// this is used for this test as is

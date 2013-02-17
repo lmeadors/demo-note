@@ -14,18 +14,16 @@ import com.elm.view.NoteEditView;
 
 public class NoteEditPresenterImpl implements NoteEditPresenter {
 
-	private transient NoteEditView view;
+	private final NoteEditView view;
 	private final NoteDataSource dataSource;
 	private final LocalBroadcastUtility localBroadcastUtility;
-	private Note note;
 
 	private BroadcastReceiver deleteReceiver;
 	private BroadcastReceiver saveReceiver;
 
-	public NoteEditPresenterImpl(AppController appController, NoteEditView noteEditView, NoteDataSource dataSource, Context context, Note note) {
+	public NoteEditPresenterImpl(AppController appController, NoteEditView noteEditView, NoteDataSource dataSource, Context context) {
 		this.dataSource = dataSource;
 		this.localBroadcastUtility = appController.getLocalBroadcastUtility(context);
-		this.note = note;
 		this.view = noteEditView;
 	}
 
@@ -34,7 +32,7 @@ public class NoteEditPresenterImpl implements NoteEditPresenter {
 		localBroadcastUtility.unregisterReceiver(saveReceiver);
 	}
 
-	public void viewReady() {
+	public void viewReady(Note note) {
 		final Long noteId = note.getId();
 		if (nullOrZero(noteId)) {
 			view.hideDelete();

@@ -16,7 +16,7 @@ public interface AppController extends Serializable {
 
 	NoteListPresenter getNoteListPresenter(Context context, NoteListView noteListView);
 
-	NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView, Note note);
+	NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView);
 
 	LocalBroadcastUtility getLocalBroadcastUtility(Context context);
 

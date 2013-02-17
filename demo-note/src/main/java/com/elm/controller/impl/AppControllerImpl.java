@@ -39,8 +39,8 @@ public class AppControllerImpl implements AppController {
 	}
 
 	@Override
-	public NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView, Note note) {
-		return new NoteEditPresenterImpl(this, noteEditView, new NoteDataSourceImpl(context), context, note);
+	public NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView) {
+		return new NoteEditPresenterImpl(this, noteEditView, new NoteDataSourceImpl(context), context);
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		final AppController appController = (AppController) getIntent().getSerializableExtra(AppController.class.getName());
 
 		Log.d(TAG, "get presenter from controller");
-		noteEditPresenter = appController.getNoteEditPresenter(this, this, note);
+		noteEditPresenter = appController.getNoteEditPresenter(this, this);
 
 		Log.d(TAG, "prepare view components");
 		setContentView(R.layout.note_edit);
@@ -68,7 +68,7 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 		// get our share provider
 		shareActionProvider = (ShareActionProvider) menu.findItem(R.id.share_note).getActionProvider();
 
-		noteEditPresenter.viewReady();
+		noteEditPresenter.viewReady(note);
 
 		return true;
 
@@ -129,15 +129,13 @@ public class NoteEditActivity extends Activity implements NoteEditView {
 	@Override
 	public boolean hideDelete() {
 		deleteMenuItem.setEnabled(false);
-		deleteMenuItem.setVisible(false);
-		return deleteMenuItem.isVisible();
+		return deleteMenuItem.isEnabled();
 	}
 
 	@Override
 	public boolean showDelete() {
 		deleteMenuItem.setEnabled(true);
-		deleteMenuItem.setVisible(true);
-		return deleteMenuItem.isVisible();
+		return deleteMenuItem.isEnabled();
 	}
 
 	@Override

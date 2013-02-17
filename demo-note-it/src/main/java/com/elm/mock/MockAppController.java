@@ -22,7 +22,7 @@ public class MockAppController implements AppController{
 	}
 
 	@Override
-	public NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView, Note note) {
+	public NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView) {
 		throw new UnsupportedOperationException("not implemented - " + this);
 	}
 

@@ -7,7 +7,7 @@ public interface NoteEditPresenter {
 
 	public void release();
 
-	public void viewReady();
+	public void viewReady(Note note);
 
 	public void delete(Note note);
 

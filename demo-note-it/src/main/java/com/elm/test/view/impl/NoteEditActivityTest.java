@@ -310,7 +310,7 @@ public class NoteEditActivityTest extends ActivityInstrumentationTestCase2<NoteE
 
 	static class TestAppController extends MockAppController {
 		@Override
-		public NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView, Note note) {
+		public NoteEditPresenter getNoteEditPresenter(Context context, NoteEditView noteEditView) {
 			return new TestNoteEditPresenter(context);
 		}
 	}
@@ -330,7 +330,7 @@ public class NoteEditActivityTest extends ActivityInstrumentationTestCase2<NoteE
 		}
 
 		@Override
-		public void viewReady() {
+		public void viewReady(Note note) {
 			Log.d(TAG, "view is ready");
 			manager.sendBroadcast(new Intent(VIEW_READY_ACTION));
 		}
