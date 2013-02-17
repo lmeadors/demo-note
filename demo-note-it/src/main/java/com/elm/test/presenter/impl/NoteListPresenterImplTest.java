@@ -51,7 +51,7 @@ public class NoteListPresenterImplTest extends InstrumentationTestCase {
 		assertNotNull(intent);
 
 		@SuppressWarnings("unchecked")
-		List<Note> actualNoteList = ((Message<List<Note>>)intent.getSerializableExtra(Message.class.getName())).getPayload();
+		List<Note> actualNoteList = ((Message<List<Note>>) intent.getSerializableExtra(Message.class.getName())).getPayload();
 		assertNotNull(actualNoteList);
 		assertTrue(actualNoteList == expectedNoteList);
 
@@ -62,7 +62,7 @@ public class NoteListPresenterImplTest extends InstrumentationTestCase {
 		final Context context = getInstrumentation().getTargetContext();
 
 		final List<BroadcastReceiver> unregisteredReceivers = new LinkedList<BroadcastReceiver>();
-		localBroadcastUtility = new LocalBroadcastUtility(context){
+		localBroadcastUtility = new LocalBroadcastUtility(context) {
 			@Override
 			public void unregisterReceiver(BroadcastReceiver receiver) {
 				unregisteredReceivers.add(receiver);
@@ -97,11 +97,21 @@ public class NoteListPresenterImplTest extends InstrumentationTestCase {
 				manager.sendBroadcast(intent);
 			}
 
+			@Override
+			public void release() {
+				// todo: nothing here yet
+			}
+
+			@Override
+			public void init() {
+				// todo: nothing here yet
+			}
+
 		};
 	}
 
 	private NoteListView getTestNoteListView() {
-		return new MockNoteListView(){
+		return new MockNoteListView() {
 			@Override
 			public void setNoteList(List<Note> noteList) {
 				// nothing here - we just

@@ -127,6 +127,7 @@ public class NoteEditPresenterImpl implements NoteEditPresenter {
 	public void release() {
 		localBroadcastUtility.unregisterReceiver(deleteReceiver);
 		localBroadcastUtility.unregisterReceiver(saveReceiver);
+		dataSource.release();
 	}
 
 }

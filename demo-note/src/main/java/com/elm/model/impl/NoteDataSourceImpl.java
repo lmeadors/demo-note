@@ -34,12 +34,12 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 	private static final String[] ALL_COLS = {NOTE_ID, NOTE_TITLE, NOTE_TEXT, NOTE_DATE};
 
 	private final LocalBroadcastUtility localBroadcastUtility;
-//	private final SQLiteDatabase database;
+	private SQLiteDatabase database;
 
 	public NoteDataSourceImpl(Context context) {
 		super(context, DB_NAME, null, 1);
 		localBroadcastUtility = new LocalBroadcastUtility(context);
-//		database = getWritableDatabase();
+		init();
 	}
 /*
 	public Note fetch(Long id) {
@@ -78,7 +78,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
 		values.put(NOTE_TEXT, note.getText());
 
-		SQLiteDatabase database = getWritableDatabase();
+//		SQLiteDatabase database = getWritableDatabase();
 		final Long newId = database.insert(TABLE_NAME, null, values);
 
 		return new Note(newId, note);
@@ -95,7 +95,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 		values.put(NOTE_DATE, dateUtility.toSqlLiteDateString(note.getDate()));
 		values.put(NOTE_TEXT, note.getText());
 
-		SQLiteDatabase database = getWritableDatabase();
+//		SQLiteDatabase database = getWritableDatabase();
 		database.update(TABLE_NAME, values, NOTE_ID + " = ?", new String[]{note.getId().toString()});
 
 		return note;
@@ -105,7 +105,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 		Log.d(TAG, "delete note " + id);
 
-		SQLiteDatabase database = getWritableDatabase();
+//		SQLiteDatabase database = getWritableDatabase();
 		database.delete(TABLE_NAME, NOTE_ID + " = ?", new String[]{id.toString()});
 
 		return id;
@@ -116,7 +116,7 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 
 		Log.d(TAG, "getting list");
 		final List<Note> noteList = new LinkedList<Note>();
-		SQLiteDatabase database = getReadableDatabase();
+//		SQLiteDatabase database = getReadableDatabase();
 		final Cursor cursor = database.query(TABLE_NAME, ALL_COLS, null, null, null, null, null);
 
 		if (null != cursor) {
@@ -229,6 +229,16 @@ public class NoteDataSourceImpl extends SQLiteOpenHelper implements NoteDataSour
 	@Override
 	public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
 		// no upgrade
+	}
+
+	@Override
+	public void release() {
+		database.close();
+	}
+
+	@Override
+	public void init() {
+		database = getWritableDatabase();
 	}
 
 }

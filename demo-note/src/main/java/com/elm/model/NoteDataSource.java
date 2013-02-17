@@ -35,4 +35,8 @@ public interface NoteDataSource {
 
 	void deleteAsync(Long id);
 
+	void release();
+
+	void init();
+
 }

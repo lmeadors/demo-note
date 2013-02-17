@@ -204,6 +204,12 @@ public class NoteEditPresenterImplTest extends InstrumentationTestCase {
 				intent.putExtra(Message.class.getName(), new Message<Note>(note));
 				manager.sendBroadcast(intent);
 			}
+
+			@Override
+			public void release() {
+				// todo: nothing here yet
+			}
+
 		};
 	}
 

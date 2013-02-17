@@ -50,6 +50,7 @@ public class NoteListPresenterImpl implements NoteListPresenter {
 		localBroadcastUtility.registerReceiver(listLoadedReceiver, NoteDataSource.LIST_ACTION);
 
 		Log.d(TAG, "building list (async)");
+		dataSource.init();
 		dataSource.listAsync();
 
 	}
@@ -57,6 +58,7 @@ public class NoteListPresenterImpl implements NoteListPresenter {
 	@Override
 	public void release() {
 		localBroadcastUtility.unregisterReceiver(listLoadedReceiver);
+		dataSource.release();
 	}
 
 	private void onNoteListLoaded(Message<List<Note>> message) {

@@ -47,4 +47,14 @@ public class MockNoteDataSource implements NoteDataSource {
 		throw new UnsupportedOperationException("not implemented - " + this);
 	}
 
+	@Override
+	public void release() {
+		throw new UnsupportedOperationException("not implemented - " + this);
+	}
+
+	@Override
+	public void init() {
+		throw new UnsupportedOperationException("not implemented - " + this);
+	}
+
 }
